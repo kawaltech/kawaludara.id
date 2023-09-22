@@ -2,6 +2,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:docs": "turbo run build --filter=docs",
+    "build:web": "turbo run build --filter=web",
     "dev": "turbo run dev",
     "start": "turbo run start",
     "lint": "turbo run lint",
