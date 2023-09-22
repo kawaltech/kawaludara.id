@@ -1,0 +1,20 @@
+@startuml Level 1: System Context Diagram
+
+!include <C4/C4_Context.puml>
+!include <office/Users/user.puml>
+!include <C4/C4_Container.puml>
+
+LAYOUT_WITH_LEGEND()
+
+title Level 1: System Context Diagram
+
+Person(SensorHostUser, "Sensor Host User", "A user with access to physical air quality sensors")
+Person(PublicUser, "Public User", "An unauthenticated user")
+System(KawalUdara, "Kawal Udara", "Kawal Udara system")
+System(Providers, "Providers", "Third-party providers of air quality data", "if any")
+
+Rel(SensorHostUser, KawalUdara, "Manual submissions", "Web/Mobile Apps")
+Rel(PublicUser, KawalUdara, "View air quality", "Web/Mobile Apps")
+BiRel(KawalUdara, Providers, "Fetch/Webhook", "HTTP")
+
+@enduml
