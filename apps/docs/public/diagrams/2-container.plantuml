@@ -10,23 +10,31 @@ title Level 2: Container Diagram
 
 Person(SensorHostUser, "Sensor Host User", "A user with access to physical air quality sensors")
 Person(PublicUser, "Public User", "An unauthenticated user")
+System(Sensors, "CrowdSensors", "Self-hosted air quality sensors")
 System_Boundary(KawalUdara, "Kawal Udara") {
 	System_Boundary(KawalUdaraRemix, "Kawal Udara Remix") {
-		Container(KawalUdaraWeb, "Kawal Udara Web", "Remix on Vercel")
-		Container(KawalUdaraService, "Kawal Udara Service", "Remix on Vercel")
+		Container(Web, "Web", "Remix on Vercel")
+		Container(Service, "Service", "Remix on Vercel")
 	}
-	Container(KawalUdaraApp, "Kawal Udara Mobile App", "iOS/Android")
+	Container(Cron, "Routine", "GitHub Actions")
+	Container(MobileApp, "Mobile App", "iOS/Android")
+	ContainerDb(KawalUdaraCache, "Cache", "Static Files", "Static Assets", "if necessary")
 	ContainerDb(KawalUdaraDB, "Database", "MySQL/Postgres", "Kawal Udara DB")
 }
 System(Providers, "Providers", "Third-party providers of air quality data", "if any")
 
-Rel(SensorHostUser, KawalUdaraWeb, "Manual submissions", "Web App")
-Rel(SensorHostUser, KawalUdaraApp, "Manual submissions", "Mobile App")
-Rel(PublicUser, KawalUdaraWeb, "View air quality", "Web App")
-Rel(PublicUser, KawalUdaraApp, "View air quality", "Mobile App")
-BiRel(KawalUdaraWeb, KawalUdaraService, "Fetch", "HTTP")
-BiRel(KawalUdaraApp, KawalUdaraService, "Fetch", "HTTP")
-BiRel(KawalUdaraService, KawalUdaraDB, "Store", "SQL")
-BiRel(KawalUdaraService, Providers, "Fetch/Webhook", "HTTP")
+Rel(SensorHostUser, Web, "Submit", "Manual")
+Rel(SensorHostUser, MobileApp, "Submit", "Manual")
+Rel(PublicUser, Web, "View", "Web App")
+Rel(PublicUser, MobileApp, "View", "Mobile App")
+Rel(Web, Service, "Fetch", "HTTP")
+Rel(MobileApp, Service, "Fetch", "HTTP")
+Rel(Cron, Service, "Fetch Periodically", "HTTP")
+Rel(Cron, KawalUdaraCache, "Store Periodically", "File System")
+Rel(Service, KawalUdaraCache, "Read-only", "File System")
+BiRel(Service, KawalUdaraDB, "Read/Write", "SQL")
+BiRel(Service, Providers, "Fetch/Webhook", "HTTP")
+Rel(SensorHostUser, Sensors, "Initial Setup", "Manual setup")
+Rel(Sensors, Service, "Webhook", "HTTP")
 
 @enduml
