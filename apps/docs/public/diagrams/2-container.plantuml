@@ -10,10 +10,12 @@ title Level 2: Container Diagram
 
 Person(SensorHostUser, "Sensor Host User", "A user with access to physical air quality sensors")
 Person(PublicUser, "Public User", "An unauthenticated user")
-System_Boundary(KawalUdara, "Kawal Udara", "Kawal Udara system") {
-	Container(KawalUdaraWeb, "Kawal Udara Web", "React w/ Remix")
+System_Boundary(KawalUdara, "Kawal Udara") {
+	System_Boundary(KawalUdaraRemix, "Kawal Udara Remix") {
+		Container(KawalUdaraWeb, "Kawal Udara Web", "Remix on Vercel")
+		Container(KawalUdaraService, "Kawal Udara Service", "Remix on Vercel")
+	}
 	Container(KawalUdaraApp, "Kawal Udara Mobile App", "iOS/Android")
-	Container(KawalUdaraService, "Kawal Udara Service", "React w/ Remix")
 	ContainerDb(KawalUdaraDB, "Database", "MySQL/Postgres", "Kawal Udara DB")
 }
 System(Providers, "Providers", "Third-party providers of air quality data", "if any")
@@ -21,7 +23,7 @@ System(Providers, "Providers", "Third-party providers of air quality data", "if 
 Rel(SensorHostUser, KawalUdaraWeb, "Manual submissions", "Web App")
 Rel(SensorHostUser, KawalUdaraApp, "Manual submissions", "Mobile App")
 Rel(PublicUser, KawalUdaraWeb, "View air quality", "Web App")
-Rel(PublicUser, KawalUdaraApp, "View air quality", "Web Apps")
+Rel(PublicUser, KawalUdaraApp, "View air quality", "Mobile App")
 BiRel(KawalUdaraWeb, KawalUdaraService, "Fetch", "HTTP")
 BiRel(KawalUdaraApp, KawalUdaraService, "Fetch", "HTTP")
 BiRel(KawalUdaraService, KawalUdaraDB, "Store", "SQL")
