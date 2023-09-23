@@ -1,0 +1,30 @@
+@startuml Level 2: Container Diagram
+
+!include <C4/C4_Context.puml>
+!include <office/Users/user.puml>
+!include <C4/C4_Container.puml>
+
+LAYOUT_WITH_LEGEND()
+
+title Level 2: Container Diagram
+
+Person(SensorHostUser, "Sensor Host User", "A user with access to physical air quality sensors")
+Person(PublicUser, "Public User", "An unauthenticated user")
+System_Boundary(KawalUdara, "Kawal Udara", "Kawal Udara system") {
+	Container(KawalUdaraWeb, "Kawal Udara Web", "React w/ Remix")
+	Container(KawalUdaraApp, "Kawal Udara Mobile App", "iOS/Android")
+	Container(KawalUdaraService, "Kawal Udara Service", "React w/ Remix")
+	ContainerDb(KawalUdaraDB, "Database", "MySQL/Postgres", "Kawal Udara DB")
+}
+System(Providers, "Providers", "Third-party providers of air quality data", "if any")
+
+Rel(SensorHostUser, KawalUdaraWeb, "Manual submissions", "Web App")
+Rel(SensorHostUser, KawalUdaraApp, "Manual submissions", "Mobile App")
+Rel(PublicUser, KawalUdaraWeb, "View air quality", "Web App")
+Rel(PublicUser, KawalUdaraApp, "View air quality", "Web Apps")
+BiRel(KawalUdaraWeb, KawalUdaraService, "Fetch", "HTTP")
+BiRel(KawalUdaraApp, KawalUdaraService, "Fetch", "HTTP")
+BiRel(KawalUdaraService, KawalUdaraDB, "Store", "SQL")
+BiRel(KawalUdaraService, Providers, "Fetch/Webhook", "HTTP")
+
+@enduml
