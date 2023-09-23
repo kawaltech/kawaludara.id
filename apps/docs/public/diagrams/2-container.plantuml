@@ -10,7 +10,7 @@ title Level 2: Container Diagram
 
 Person(SensorHostUser, "Sensor Host User", "A user with access to physical air quality sensors")
 Person(PublicUser, "Public User", "An unauthenticated user")
-System(Sensors, "CrowdSensors", "Self-hosted air quality sensors")
+System(Sensors, "Sensors", "Self-hosted air quality sensors", "if feasible")
 System_Boundary(KawalUdara, "Kawal Udara") {
 	System_Boundary(KawalUdaraRemix, "Kawal Udara Remix") {
 		Container(Web, "Web", "Remix on Vercel")
@@ -34,7 +34,7 @@ Rel(Cron, KawalUdaraCache, "Store Periodically", "File System")
 Rel(Service, KawalUdaraCache, "Read-only", "File System")
 BiRel(Service, KawalUdaraDB, "Read/Write", "SQL")
 BiRel(Service, Providers, "Fetch/Webhook", "HTTP")
-Rel(SensorHostUser, Sensors, "Initial Setup", "Manual setup")
+Rel(SensorHostUser, Sensors, "Initial Setup", "Manual")
 Rel(Sensors, Service, "Webhook", "HTTP")
 
 @enduml
