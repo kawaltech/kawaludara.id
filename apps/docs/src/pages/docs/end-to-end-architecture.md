@@ -11,11 +11,11 @@ Illustrate the high-level architecture using the [C4 model](https://c4model.com/
 
 ### System context diagram
 
-![System Context Diagram](https://www.plantuml.com/plantuml/proxy?src=https://docs.kawaludara.id/diagrams/1-system-context.plantuml)
+![System Context Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://docs.kawaludara.id/diagrams/1-system-context.plantuml)
 
 ### Container diagram
 
-![Container Diagram](https://www.plantuml.com/plantuml/proxy?src=https://docs.kawaludara.id/diagrams/2-container.plantuml)
+![Container Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://docs.kawaludara.id/diagrams/2-container.plantuml)
 
 ## UML
 
