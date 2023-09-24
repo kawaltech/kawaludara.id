@@ -11,6 +11,7 @@ title Level 2: Container Diagram
 Person(SensorHostUser, "Sensor Host User", "A user with access to physical air quality sensors")
 Person(PublicUser, "Public User", "An unauthenticated user")
 System(Sensors, "Sensors", "Self-hosted air quality sensors", "if feasible")
+System(Broker, "Mqtt Broker", "Mqtt broker for hosted Sesors", "if feasible")
 System_Boundary(KawalUdara, "Kawal Udara") {
 	System_Boundary(KawalUdaraRemix, "Kawal Udara Remix") {
 		Container(Web, "Web", "Remix on Vercel")
@@ -20,6 +21,8 @@ System_Boundary(KawalUdara, "Kawal Udara") {
 	Container(MobileApp, "Mobile App", "iOS/Android")
 	ContainerDb(KawalUdaraCache, "Cache", "Static Files", "Static Assets", "if necessary")
 	ContainerDb(KawalUdaraDB, "Database", "MySQL/Postgres", "Kawal Udara DB")
+	ContainerDb(KawalUdaraDBTimeSeries, "Database Timeseries", "influxDB", "time series database of the sensors")
+
 }
 System(Providers, "Providers", "Third-party providers of air quality data", "if any")
 
@@ -33,8 +36,16 @@ Rel(Cron, Service, "Fetch Periodically", "HTTP")
 Rel(Cron, KawalUdaraCache, "Store Periodically", "File System")
 Rel(Service, KawalUdaraCache, "Read-only", "File System")
 BiRel(Service, KawalUdaraDB, "Read/Write", "SQL")
+BiRel(Service, KawalUdaraDBTimeSeries, "Read/Write","SQL")
 BiRel(Service, Providers, "Fetch/Webhook", "HTTP")
-Rel(SensorHostUser, Sensors, "Initial Setup", "Manual")
-Rel(Sensors, Service, "Webhook", "HTTP")
+BiRel(Service, Broker, "Publish/Subscribe", "MQTT")
+BiRel(Service, Broker, "Publish/Subscribe", "MQTT")
+
+Rel(SensorHostUser, Sensors, "Provisioning Setup for adding Sesors", "Automatic")
+
+Rel(Sensors, Service, "Post", "HTTP", "getting identity to allow for using the broker")
+Rel(Sensors, Broker, "Publish", "MQTT")
+
+
 
 @enduml
